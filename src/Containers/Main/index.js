@@ -1,18 +1,26 @@
-import { Body, Container, Header, Left, Right, Title } from "native-base";
+import { Body, Container, Header, Left, Right } from "native-base";
 import React, { Component } from "react";
-import { TouchableOpacity, Linking, Alert, Platform, Image } from "react-native";
+import { Alert, Image, Linking, Platform, TouchableOpacity } from "react-native";
 import { View } from "react-native-animatable";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import ScrollableTabView, { ScrollableTabBar } from "../../Components/react-native-scrollable-tab-view";
-import styles from "./styles";
-import I18n from '../../i18n';
 import { showLocation } from 'react-native-map-link';
+import Ionicons from "react-native-vector-icons/Ionicons";
 import MainScreenLogo from '../../assets/images/MomknLogo.png';
+import ScrollableTabView, { ScrollableTabBar } from "../../Components/react-native-scrollable-tab-view";
+import I18n from '../../i18n';
+import styles from "./styles";
 
 let config = {
+  photosPath: "https://graph.facebook.com/v3.2/778320115870113/photos?fields=source,id,limit=10",
+
+  fbPageAccessToken: "EAAFAVUvVRmgBAINMfiZCUNUCYIyyPzZC245ZAp6EYx52f2ClZClHZAkVEqYJB20HZB5LnZBcQQZC0sltetjhkHYZAWV7dYqy3f9X13pZAjFqzi9JLZCIIc7z1YvgbELOK5REwCKjbE03JUEUIPMogqCH9adOTXj04ZCkjO1fhhwRcRDFQzHaZCMVQFwhVRD2WCdcG5DUYKBeyw20PZAAZDZD",
+
   phoneNumber: "01157954393",
   whatsAppPhoneNumber: "01157954393",
-  navigationLocation: []
+  navigationLocation: [],
+  navigationToLocationDetails: {
+    latitude: 30.5833,
+    longitude: 32.2667
+  }
 }
 
 
@@ -33,7 +41,6 @@ export default class MainScreen extends Component {
         currentLanguage: I18n.currentLocale()
       }
     })
-
   }
 
   render() {
@@ -52,11 +59,10 @@ export default class MainScreen extends Component {
 
           <Right style={styles.right}></Right>
 
-
+          {/* Settings Button */}
           <TouchableOpacity style={{ position: 'absolute', top: 20, right: 20 }} onPress={this.languageChangeHandler}>
             <Ionicons name="ios-settings" size={20} color="black" style={{ textAlign: "right" }} />
           </TouchableOpacity>
-
 
 
         </Header>
@@ -67,7 +73,7 @@ export default class MainScreen extends Component {
             <Ionicons name="logo-whatsapp" size={32} color="#4FCE5D" />
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.roundedButton} onPress={() => navigateToLocation(config.navigationLocation)}>
+          <TouchableOpacity style={styles.roundedButton} onPress={() => navigateToLocation(config.navigationToLocationDetails)}>
             <Ionicons name="md-locate" size={32} color="#DD4B3E" />
           </TouchableOpacity>
 
@@ -101,24 +107,31 @@ export default class MainScreen extends Component {
           )}
         >
           <View tabLabel={I18n.t('mainTabs.photosTabLabel', { language: this.state.currentLanguage })}>
-            {/* <FlatList
-              data={this.state.dataSource}
-              renderItem={({ item }) => (
-                <View style={styles.rowMain}>
-                  <ImageBackground source={rowData.cardBgImage} style={styles.imageBG}>
-                    <View style={styles.cardContent}>
-                      <Right>
-                        <View style={styles.profileContainer}>
-                          <View key={item.id} style={styles.imgview}> */}
-            {/* <Image style={styles.profileImg} source={item.img} /> */}
-            {/* </View>
-                        </View>
-                      </Right>
-                    </View>
-                  </ImageBackground>
-                </View>
-              )}
-            /> */}
+
+
+            {/*
+              <FlatList
+                data={this.state.dataSource}
+                renderItem={({ item }) => (
+                  <View style={styles.rowMain}>
+                    <ImageBackground source={rowData.cardBgImage} style={styles.imageBG}>
+                      <View style={styles.cardContent}>
+                        <Right>
+                          <View style={styles.profileContainer}>
+                            <View key={item.id} style={styles.imgview}> */}
+            {/*
+                          </View>
+                          </View>
+                        </Right>
+                      </View>
+                    </ImageBackground>
+                  </View>
+                )}
+              />
+
+                          */}
+
+
           </View>
           <View tabLabel={I18n.t('mainTabs.videosTabLabel', { language: this.state.currentLanguage })}>
             {/* <FlatList
@@ -163,17 +176,17 @@ export const callNumber = phoneNumber => {
 };
 
 
-export const navigateToLocation = (location) => {
+export const navigateToLocation = async ({ latitude, longitude }) => {
 
-  showLocation({
-    latitude: 38.8976763,
-    longitude: -77.0387185,
-    title: 'Mmokn Location',  // optional
-    googleForceLatLon: false,  // optionally force GoogleMaps to use the latlon for the query instead of the title
-    googlePlaceId: 'ChIJGVtI4by3t4kRr51d_Qm_x58',  // optionally specify the google-place-id
-    dialogTitle: 'This is the dialog Title', // optional (default: 'Open in Maps')
-    dialogMessage: 'This is the amazing dialog Message', // optional (default: 'What app would you like to use?')
-    cancelText: 'This is the cancel button text', // optional (default: 'Cancel')
+  await showLocation({
+    latitude,
+    longitude
+    // title: 'Mahmoud Momkn',  // optional
+    // googleForceLatLon: false,  // optionally force GoogleMaps to use the latlon for the query instead of the title
+    // googlePlaceId: 'ChIJGVtI4by3t4kRr51d_Qm_x58',  // optionally specify the google-place-id
+    // dialogTitle: 'This is the dialog Title', // optional (default: 'Open in Maps')
+    // dialogMessage: 'This is the amazing dialog Message', // optional (default: 'What app would you like to use?')
+    // cancelText: 'This is the cancel button text', // optional (default: 'Cancel')
   })
 }
 
@@ -189,4 +202,4 @@ export const messageToWhatsApp = (phoneNumber) => {
       )
     }
   });
-} 
+}

@@ -38,8 +38,6 @@ const colors = {
   blacktxt:'#363636',
   skyblue:'#71d4ff',
   txtsky:'#83c8e7',
-
-  //WooCommerce Color
   veryLightGray: "#dcdcdc",
   red: 'red',
   white: 'white',
