@@ -1,21 +1,31 @@
 import { Body, Container, Header, Left, Right } from "native-base";
 import React, { Component } from "react";
-import { Alert, Image, Linking, Platform, TouchableOpacity } from "react-native";
+import { Alert, Image, Linking, Platform, TouchableOpacity, Text, FlatList, ActivityIndicator } from "react-native";
 import { View } from "react-native-animatable";
 import { showLocation } from 'react-native-map-link';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import MainScreenLogo from '../../assets/images/MomknLogo.png';
-import ScrollableTabView, { ScrollableTabBar } from "../../Components/react-native-scrollable-tab-view";
 import I18n from '../../i18n';
 import styles from "./styles";
+import { connect } from 'react-redux';
+import ScrollableTabView, { ScrollableTabBar } from 'react-native-scrollable-tab-view';
+import debounce from 'lodash.debounce';
+import ImageView from 'react-native-image-view';
 
 let config = {
-  photosPath: "https://graph.facebook.com/v3.2/778320115870113/photos?fields=source,id,limit=10",
+  photosPath: `https://graph.facebook.com/v3.2/{albumId}/photos?fields=source,id&limit={limit}&access_token={accessToken}`,
+  videosPath: `https://graph.facebook.com/v3.2/{pageId}/videos?fields=source,thumbnails,id&limit={limit}&access_token={accessToken}`,
 
-  fbPageAccessToken: "EAAFAVUvVRmgBAINMfiZCUNUCYIyyPzZC245ZAp6EYx52f2ClZClHZAkVEqYJB20HZB5LnZBcQQZC0sltetjhkHYZAWV7dYqy3f9X13pZAjFqzi9JLZCIIc7z1YvgbELOK5REwCKjbE03JUEUIPMogqCH9adOTXj04ZCkjO1fhhwRcRDFQzHaZCMVQFwhVRD2WCdcG5DUYKBeyw20PZAAZDZD",
+
+  pageId: "778311709204287",
+  fbPageAccessToken: "***REMOVED***",
+  photoLimit: 5,
+  videoLimit: 5,
+  albumId: "778320115870113",
+
 
   phoneNumber: "01157954393",
-  whatsAppPhoneNumber: "01157954393",
+  whatsAppPhoneNumber: "+201157954393",
   navigationLocation: [],
   navigationToLocationDetails: {
     latitude: 30.5833,
@@ -23,15 +33,62 @@ let config = {
   }
 }
 
+class MainScreen extends Component {
 
-export default class MainScreen extends Component {
-  static navigationOptions = {
-    header: null
-  };
+  constructor(props) {
+    super(props);
 
-  state = {
-    currentLanguage: I18n.currentLocale()
+    this.state = {
+      currentLanguage: I18n.currentLocale(),
+      loading: false,
+      data: [],
+      error: null,
+      refreshing: false,
+      isImageViewVisible: false
+    };
+
+    this.photoPath = config.photosPath
+      .replace('{albumId}', config.albumId)
+      .replace("{limit}", config.photoLimit)
+      .replace("{accessToken}", config.fbPageAccessToken);
   }
+
+  componentDidMount() {
+    this.makeRemoteRequestToFbPage();
+  }
+
+  makeRemoteRequestToFbPage = (photoPath) => {
+
+    this.setState({ loading: true });
+    fetch(photoPath || this.photoPath)
+      .then(res => res.json())
+      .then(res => {
+
+        if (res.error) {
+          this.setState({ loading: false });
+          return alert('Facebook Error: ' + res.error.message);
+        }
+
+
+        console.log("INCOMING DATA: ", res);
+        this.setState((prevState) => {
+
+          console.log('PREV STATE: ', prevState);
+          return {
+            ...prevState,
+            data: prevState.refreshing ? res.data : [...prevState.data, ...res.data],
+            error: res.error || null,
+            loading: false,
+            refreshing: false,
+            nextPage: res.paging.next || null
+          }
+        })
+      })
+      .catch(error => {
+        console.log('CAUGHT ERR: ', err);
+        this.setState({ error, loading: false, refreshing: false });
+      });
+  };
 
   languageChangeHandler = () => {
     I18n.locale = I18n.currentLocale() === 'en' ? 'ar' : 'en';
@@ -43,49 +100,76 @@ export default class MainScreen extends Component {
     })
   }
 
-  render() {
+
+  handlePhotosRefreshHandler = () => {
+    this.setState({ refreshing: true }, () => this.makeRemoteRequestToFbPage());
+  }
+
+  loadMorePhotos = () => {
+    const { nextPage } = this.state;
+    console.log('NEXT PAGE: ', nextPage);
+    if (!nextPage) return;
+
+    this.makeRemoteRequestToFbPage(nextPage);
+  }
+
+  renderFooter = () => {
+    if (!this.state.loading) return null;
+
     return (
-      // <Container }>
-      <Container style={styles.main}>
-        <Header style={styles.header}>
-          {/* Take up the space */}
-          <Left style={styles.left}></Left>
+      <View style={{ paddingVertical: 20, borderTopWidth: 1, borderColor: "#CED0CE" }}>
+        <ActivityIndicator animating size="large" />
+      </View>
+    );
+  };
 
-          {/* Title */}
-          <Body style={styles.body}>
-            {/* <Title style={styles.headerTitle}>{I18n.t('appName', { language: this.state.currentLanguage })}</Title> */}
-            <Image source={MainScreenLogo} style={{ width: 150, height: 150 }} />
-          </Body >
+  render() {
+    const imgsAsUris = this.state.data.map((img) => ({ id: img.id, source: { uri: img.source } }));
 
-          <Right style={styles.right}></Right>
+    return (
+      <React.Fragment>
 
-          {/* Settings Button */}
-          <TouchableOpacity style={{ position: 'absolute', top: 20, right: 20 }} onPress={this.languageChangeHandler}>
-            <Ionicons name="ios-settings" size={20} color="black" style={{ textAlign: "right" }} />
-          </TouchableOpacity>
+        <Container style={styles.main}>
+          <Header style={styles.header}>
+            {/* Take up the space */}
+            <Left style={styles.left}></Left>
 
+            {/* Title */}
+            <Body style={styles.body}>
+              <Image source={MainScreenLogo} style={{ width: 150, height: 150 }} />
+            </Body >
 
-        </Header>
+            <Right style={styles.right}></Right>
 
-        <View style={styles.profile}>
-
-          <TouchableOpacity style={styles.roundedButton} onPress={() => messageToWhatsApp(config.whatsAppPhoneNumber)} >
-            <Ionicons name="logo-whatsapp" size={32} color="#4FCE5D" />
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.roundedButton} onPress={() => navigateToLocation(config.navigationToLocationDetails)}>
-            <Ionicons name="md-locate" size={32} color="#DD4B3E" />
-          </TouchableOpacity>
+            {/* Settings Button */}
+            <TouchableOpacity style={{ position: 'absolute', top: 20, right: 20 }} onPress={this.languageChangeHandler}>
+              <Ionicons name="ios-settings" size={32} color="black" />
+            </TouchableOpacity>
 
 
-          <TouchableOpacity style={styles.roundedButton} onPress={() => callNumber(config.phoneNumber)}>
-            <Ionicons name="ios-call" size={32} color="#1180FF" />
-          </TouchableOpacity>
-          {/* </View> */}
-        </View>
+          </Header>
 
+          <View style={styles.profile}>
+
+            <TouchableOpacity style={styles.roundedButton} onPress={() => messageToWhatsApp(config.whatsAppPhoneNumber)} >
+              <Ionicons name="logo-whatsapp" size={32} color="#4FCE5D" />
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.roundedButton} onPress={() => navigateToLocation(config.navigationToLocationDetails)}>
+              <Ionicons name="md-locate" size={32} color="#DD4B3E" />
+            </TouchableOpacity>
+
+
+            <TouchableOpacity style={styles.roundedButton} onPress={() => callNumber(config.phoneNumber)}>
+              <Ionicons name="ios-call" size={32} color="#1180FF" />
+            </TouchableOpacity>
+            {/* </View> */}
+          </View>
+
+        </Container>
 
         <ScrollableTabView
+          style={{ flex: 3, marginTop: 20 }}
           initialPage={0}
           tabBarUnderlineStyle={styles.tabUnderLine}
           tabBarBackgroundColor={"#457B9D"}
@@ -107,32 +191,35 @@ export default class MainScreen extends Component {
           )}
         >
           <View tabLabel={I18n.t('mainTabs.photosTabLabel', { language: this.state.currentLanguage })}>
+            {/* <Text>{"isConnected: " + this.props.isConnected}</Text> */}
 
+            <FlatList
+              columnWrapperStyle={{ flexWrap: 'wrap', flex: 1, justifyContent: "space-around" }}
+              data={imgsAsUris}
+              numColumns={2}
+              keyExtractor={item => item.id}
+              horizontal={false}
+              renderItem={({ item, index }) => {
+                return (
+                  <TouchableOpacity key={item.id} style={{ flex: 1, margin: 3 }}
+                    onPress={() => { this.setState({ imageIndex: index, isImageViewVisible: true }); }}>
 
-            {/*
-              <FlatList
-                data={this.state.dataSource}
-                renderItem={({ item }) => (
-                  <View style={styles.rowMain}>
-                    <ImageBackground source={rowData.cardBgImage} style={styles.imageBG}>
-                      <View style={styles.cardContent}>
-                        <Right>
-                          <View style={styles.profileContainer}>
-                            <View key={item.id} style={styles.imgview}> */}
-            {/*
-                          </View>
-                          </View>
-                        </Right>
-                      </View>
-                    </ImageBackground>
-                  </View>
-                )}
-              />
+                    <Image style={{ height: 200 }} source={item.source} resizeMethod="resize" />
 
-                          */}
-
-
+                  </TouchableOpacity>
+                );
+              }}
+              // removeClippedSubviews={true}
+              ListFooterComponent={this.renderFooter}
+              refreshing={this.state.refreshing}
+              onRefresh={this.handlePhotosRefreshHandler}
+              // OnEndedReached is triggered twice so this workaround is fine for now.
+              onEndReached={debounce(this.loadMorePhotos, 500)}
+              onEndReachedThreshold={100}
+            />
           </View>
+
+
           <View tabLabel={I18n.t('mainTabs.videosTabLabel', { language: this.state.currentLanguage })}>
             {/* <FlatList
               data={this.state.dataSource}
@@ -155,7 +242,17 @@ export default class MainScreen extends Component {
           </View>
 
         </ScrollableTabView>
-      </Container>
+
+        <ImageView
+          glideAlways
+          images={imgsAsUris}
+          imageIndex={this.state.imageIndex}
+          animationType="fade"
+          isVisible={this.state.isImageViewVisible}
+          onClose={() => this.setState({ isImageViewVisible: false })}
+        />
+
+      </React.Fragment>
     );
   }
 }
@@ -203,3 +300,11 @@ export const messageToWhatsApp = (phoneNumber) => {
     }
   });
 }
+
+const mapStateToProps = (state) => {
+  return {
+    isConnected: state.network.isConnected
+  }
+}
+
+export default connect(mapStateToProps)(MainScreen);
