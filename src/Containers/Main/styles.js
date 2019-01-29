@@ -4,61 +4,40 @@ import { Metrics } from '../../Themes';
 
 
 const styles = StyleSheet.create({
-  main: {
-    flex: 1,
-    height: Metrics.HEIGHT,
-    width: Metrics.WIDTH,
-    backgroundColor: "#F1FAEE",
-    flexDirection: 'column'
-  },
-
   header: {
     flex: 1,
-    backgroundColor: '#F1FAEE',
-    // width: Metrics.WIDTH,
-    flexDirection: 'row',
-    borderBottomColor: 'transparent',
-    paddingTop: (Metrics.HEIGHT * 0.16),
-    elevation: 0
-  },
-  left: {
-    flex: 1,
+    flexDirection: 'column',
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: '#F1FAEE'
   },
 
-  body: {
+  logo: {
     flex: 2,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 
-  right: {
-    flex: 1
+  settingButton: {
+    position: 'absolute', top: 20, right: 20
   },
 
-  // headerTitle: {
-  //   color: 'white',
-  //   fontFamily: Fonts.type.SFUIDisplayBold,
-  //   paddingTop: (Platform.OS === 'ios') ? 15 : 0,
-  //   fontSize: 17,
-  //   letterSpacing: 0.7,
-  //   marginVertical: (Metrics.HEIGHT * 0.01)
-  // },
-  profile: {
+  contactIcons: {
+    flex: 1,
     flexDirection: "row",
     backgroundColor: '#F1FAEE',
     width: Metrics.WIDTH,
     justifyContent: 'space-around',
     alignItems: 'center',
     borderBottomColor: '#2d324f',
-    ...Platform.select({
-      ios: {
-        padding: 5,
-      },
-      android: {
-        padding: 20
-      }
-    }),
+    paddingVertical: 1,
+    paddingHorizontal: 10
   },
+
+
+
+  body: {
+    flex: 2
+  },
+
 
 
   imgview: { width: (Metrics.WIDTH) * 0.042, },

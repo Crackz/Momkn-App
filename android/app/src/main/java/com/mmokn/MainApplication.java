@@ -3,6 +3,8 @@ package com.mmokn;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.lugg.ReactNativeConfig.ReactNativeConfigPackage;
+import com.brentvatne.react.ReactVideoPackage;
 import com.reactcommunity.rnlanguages.RNLanguagesPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
@@ -26,6 +28,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new ReactNativeConfigPackage(),
+            new ReactVideoPackage(),
             new RNLanguagesPackage(),
             new RNGestureHandlerPackage(),
             new VectorIconsPackage()
