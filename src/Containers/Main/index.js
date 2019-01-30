@@ -1,18 +1,18 @@
 import React, { Component } from "react";
-import { Alert, Image, Linking, Platform, TouchableOpacity } from "react-native";
+import { FlatList, Image, TouchableOpacity } from "react-native";
+import * as Animatable from 'react-native-animatable';
 import { View } from "react-native-animatable";
 import config from 'react-native-config';
-import { showLocation } from 'react-native-map-link';
 import ScrollableTabView, { ScrollableTabBar } from 'react-native-scrollable-tab-view';
 import Ionicons from "react-native-vector-icons/Ionicons";
-import Video from 'react-native-video';
 import { connect } from 'react-redux';
 import MainScreenLogo from '../../assets/images/MomknLogo.png';
+import ContactIcons from '../../Components/ContactIcons/ContactIcons';
 import PhotosGrid from "../../Components/PhotosGrid/PhotosGrid";
+import VideoPlayer from '../../Components/VideoPlayer/VideoPlayer';
 import I18n from '../../i18n';
 import styles from "./styles";
-import * as Animatable from 'react-native-animatable';
-const AnimatedIcon = Animatable.createAnimatableComponent(Ionicons);
+
 
 
 class MainScreen extends Component {
@@ -54,11 +54,15 @@ class MainScreen extends Component {
     }
   }
 
+
+
+
+
   render() {
+    const { videoUri, viewVideoPlayer } = this.state;
+
     return (
       <React.Fragment>
-
-
         <View style={styles.header}>
 
           <Animatable.View animation="fadeInDown" style={styles.logo}>
@@ -70,55 +74,78 @@ class MainScreen extends Component {
             <Ionicons name="ios-settings" size={24} color="black" />
           </TouchableOpacity>
 
-          <View style={styles.contactIcons}>
 
-            <TouchableOpacity style={styles.roundedButton} onPress={() => messageToWhatsApp(config.whatsAppPhoneNumber)} >
-              <AnimatedIcon animation="pulse" easing="ease-out" iterationCount="infinite"  name="logo-whatsapp" size={32} color="#4FCE5D" />
-            </TouchableOpacity>
+          <ContactIcons
+            phoneNumber={config.phoneNumber}
+            whatsAppPhoneNumber={config.whatsAppPhoneNumber}
+            navigateToLocation={{
+              latitude: config.navigationToLocationDetailsLatitude,
+              longitude: config.navigationToLocationDetailsLongitude
+            }}
+          />
 
-            <TouchableOpacity style={styles.roundedButton}
-              onPress={() => navigateToLocation({ latitude: config.navigationToLocationDetailsLatitude, longitude: config.navigationToLocationDetailsLongitude })} >
-              <AnimatedIcon animation="jello" iterationCount="infinite" name="md-locate" size={32} color="#DD4B3E" />
-            </TouchableOpacity>
-
-
-            <TouchableOpacity style={styles.roundedButton} onPress={() => callNumber(config.phoneNumber)}>
-              <AnimatedIcon animation="pulse" easing="ease-out" iterationCount="infinite" name="ios-call" size={32} color="#1180FF" />
-            </TouchableOpacity>
-
-          </View>
 
         </View>
 
         <ScrollableTabView
-          style={styles.body}
+          style={styles.scrollableTabView}
           initialPage={0}
           tabBarUnderlineStyle={styles.tabUnderLine}
           tabBarBackgroundColor={"#457B9D"}
           tabBarActiveTextColor={"#FFFFFF"}
           tabBarInactiveTextColor={"#fff8"}
           tabBarTextStyle={styles.tabText}
-          renderTabBar={() => (
-            <ScrollableTabBar
-              style={{
-                shadowColor: "#000",
-                shadowOffset: { width: 0, height: 0 },
-                shadowOpacity: 0,
-                shadowRadius: 0,
-                elevation: 0,
-                borderWidth: 0,
-                borderColor: "transparent"
-              }}
-            />
-          )}
         >
+
           <View tabLabel={I18n.t('mainTabs.photosTabLabel', { language: this.state.currentLanguage })}>
             <PhotosGrid photosUrl={this.photoPaths} transformResponse={this.photosTransformResponseHandler} />
           </View>
 
-
           <View tabLabel={I18n.t('mainTabs.videosTabLabel', { language: this.state.currentLanguage })}>
-            <Video url={"https://scontent.xx.fbcdn.net/v/t15.5256-10/49903906_2216500335344010_5799404124000747520_n.jpg?_nc_cat=103&_nc_ht=scontent.xx&oh=ab1183965e49ed73c6226adcd154ab06&oe=5CC59519"} />
+
+
+            <FlatList
+              data={[
+                {
+                  thumbnail: "https://scontent.xx.fbcdn.net/v/t15.5256-10/49934558_2216500305344013_7066558568836628480_n.jpg?_nc_cat=110&_nc_ht=scontent.xx&oh=0a949476c172b7fd7617982264fd3f6f&oe=5CF36185",
+                  uri: "https://scontent.xx.fbcdn.net/v/t42.1790-29/51496670_241088553475702_3166802999475981461_n.mp4?_nc_cat=101&efg=eyJybHIiOjUzMSwicmxhIjo1MTIsInZlbmNvZGVfdGFnIjoic2QifQ\u00253D\u00253D&rl=531&vabr=295&_nc_ht=scontent.xx&oh=725b58f520f4d57496a96907065ad29c&oe=5C531343",
+                  id: "1"
+                },
+                {
+                  // thumbnail: "https://scontent.xx.fbcdn.net/v/t15.5256-10/49934558_2216500305344013_7066558568836628480_n.jpg?_nc_cat=110&_nc_ht=scontent.xx&oh=0a949476c172b7fd7617982264fd3f6f&oe=5CF36185",
+                  uri: "https://www.radiantmediaplayer.com/media/bbb-360p.mp4",
+                  id: "2"
+                }
+              ]}
+              numColumns={1}
+              keyExtractor={item => item.id}
+              renderItem={({ item, index }) => {
+                return (
+                  <View style={{ flex: 1, marginVertical: 10 }}>
+                    <VideoPlayer item={item} />
+                  </View>
+                );
+              }}
+            // ItemSeparatorComponent={() => (
+            //   <View style={{
+            //     height: 5,
+            //     borderStyle: "solid",
+            //     borderColor: "#8c8b8b",
+            //     borderWidth: 1,
+            //     borderRadius: 20,
+            //     paddingHorizontal: 5
+            //   }}>
+
+            //   </View>
+            // )}
+            // // removeClippedSubviews={true}
+            // ListFooterComponent={this.renderPhotosFooter}
+            // refreshing={this.state.refreshing}
+            // onRefresh={this.handlePhotosRefreshHandler}
+            // OnEndedReached is triggered twice so this workaround is fine for now.
+            // onEndReached={debounce(this.loadMorePhotos, 500)}
+            // onEndReachedThreshold={.01}
+            />
 
           </View>
 
@@ -130,48 +157,6 @@ class MainScreen extends Component {
 }
 
 
-export const callNumber = phoneNumber => {
-  let linkingToPhone = Platform.OS !== 'android' ? `telprompt:${phoneNumber}` : `tel:${phoneNumber}`;
-
-  Linking.canOpenURL(linkingToPhone)
-    .then(supported => {
-      if (!supported) {
-        Alert.alert('Phone number is not available');
-      } else {
-        return Linking.openURL(linkingToPhone);
-      }
-    })
-    .catch(err => console.log(err));
-};
-
-
-export const navigateToLocation = async ({ latitude, longitude }) => {
-
-  await showLocation({
-    latitude,
-    longitude
-    // title: 'Mahmoud Momkn',  // optional
-    // googleForceLatLon: false,  // optionally force GoogleMaps to use the latlon for the query instead of the title
-    // googlePlaceId: 'ChIJGVtI4by3t4kRr51d_Qm_x58',  // optionally specify the google-place-id
-    // dialogTitle: 'This is the dialog Title', // optional (default: 'Open in Maps')
-    // dialogMessage: 'This is the amazing dialog Message', // optional (default: 'What app would you like to use?')
-    // cancelText: 'This is the cancel button text', // optional (default: 'Cancel')
-  })
-}
-
-export const messageToWhatsApp = (phoneNumber) => {
-  const url = `whatsapp://send?phone=${phoneNumber}`;
-  Linking.canOpenURL(url).then(supported => {
-    if (supported) {
-      Linking.openURL(url);
-    } else {
-      Alert.alert(
-        'Alert',
-        'WhatsApp is not installed',
-      )
-    }
-  });
-}
 
 const mapStateToProps = (state) => {
   return {

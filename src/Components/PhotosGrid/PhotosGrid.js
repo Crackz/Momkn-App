@@ -1,6 +1,6 @@
 import debounce from 'lodash.debounce';
 import React, { Component } from 'react';
-import { TouchableOpacity, FlatList, Image, View, ActivityIndicator, StyleSheet } from 'react-native';
+import { ActivityIndicator, FlatList, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import ImageView from 'react-native-image-view';
 
 
@@ -67,7 +67,7 @@ class PhotosGrid extends Component {
                 })
             })
             .catch(error => {
-                console.log('CAUGHT ERR: ', err);
+                console.log('CAUGHT ERR: ', error);
                 this.setState({ error, loading: false, refreshing: false });
             });
     };
