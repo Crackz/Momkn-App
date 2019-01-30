@@ -78,6 +78,9 @@
 		C4134F7114084BCABA53FF04 /* libRCTVideo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 31F2CC1A5C7D40A192238CC9 /* libRCTVideo.a */; };
 		3B11B0641A9140DD978CC3A5 /* libReactNativeConfig.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF615907F57460181576C59 /* libReactNativeConfig.a */; };
 		9351AE552F384D559759EFCB /* libReactNativeConfig-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C146C302FBA4E6A8EA9C403 /* libReactNativeConfig-tvOS.a */; };
+		EC5CF8040F6F4808821EDCE0 /* Monadi.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F4A19DFA1CA84921B8BEA161 /* Monadi.ttf */; };
+		03DBBFF429BD47AA8611B4A4 /* Oranienbaum.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1557D796AF5848C198896657 /* Oranienbaum.ttf */; };
+		08F7B2D897144EF39EA0254A /* barbaro.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0F83C133BCBC4B5BBD5D63F3 /* barbaro.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -433,6 +436,9 @@
 		5244C36D3CCD4441A361200A /* libRCTOrientation.a */ = {isa = PBXFileReference; name = "libRCTOrientation.a"; path = "libRCTOrientation.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		622589A4299345EFA694F285 /* BVLinearGradient.xcodeproj */ = {isa = PBXFileReference; name = "BVLinearGradient.xcodeproj"; path = "../node_modules/react-native-linear-gradient/BVLinearGradient.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		36ADCF8603504063931DADA5 /* libBVLinearGradient.a */ = {isa = PBXFileReference; name = "libBVLinearGradient.a"; path = "libBVLinearGradient.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		F4A19DFA1CA84921B8BEA161 /* Monadi.ttf */ = {isa = PBXFileReference; name = "Monadi.ttf"; path = "../src/assets/fonts/Monadi.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		1557D796AF5848C198896657 /* Oranienbaum.ttf */ = {isa = PBXFileReference; name = "Oranienbaum.ttf"; path = "../src/assets/fonts/Oranienbaum.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		0F83C133BCBC4B5BBD5D63F3 /* barbaro.ttf */ = {isa = PBXFileReference; name = "barbaro.ttf"; path = "../src/assets/fonts/barbaro.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -748,6 +754,9 @@
 				B1E644C6644A40A1A27EE854 /* Octicons.ttf */,
 				EA6A6EDB6B664EFA91FAE28F /* SimpleLineIcons.ttf */,
 				FE7AF448D2C54F069A807FE2 /* Zocial.ttf */,
+				F4A19DFA1CA84921B8BEA161 /* Monadi.ttf */,
+				1557D796AF5848C198896657 /* Oranienbaum.ttf */,
+				0F83C133BCBC4B5BBD5D63F3 /* barbaro.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1232,6 +1241,9 @@
 				5B1B664CA7D542FE80CC13A8 /* Octicons.ttf in Resources */,
 				6DF9B0ED33354A5CB0E1C717 /* SimpleLineIcons.ttf in Resources */,
 				91DAE8A4159D48EABC7D820C /* Zocial.ttf in Resources */,
+				EC5CF8040F6F4808821EDCE0 /* Monadi.ttf in Resources */,
+				03DBBFF429BD47AA8611B4A4 /* Oranienbaum.ttf in Resources */,
+				08F7B2D897144EF39EA0254A /* barbaro.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -20,18 +20,16 @@ const styles = StyleSheet.create({
   },
 
   scrollableTabView: {
-    flex: 2
+    flex: 2,
+    
   },
-
+  tabText: {
+    textAlign: "center",
+    paddingTop: 5,
+  },
   tabUnderLine: {
     backgroundColor: '#0691ce',
   },
-
-  fakeContent: {
-    width: "100%",
-    height: 600,
-    backgroundColor: "#ccc"
-  }
 });
 
 export default styles;
