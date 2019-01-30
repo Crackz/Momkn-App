@@ -16,12 +16,15 @@ const styles = StyleSheet.create({
   },
 
   settingButton: {
-    position: 'absolute', top: 20, right: 20
+    position: 'absolute',
+    top: 20,
+    right: 20,
+    textAlign: "center"
   },
 
   scrollableTabView: {
     flex: 2,
-    
+
   },
   tabText: {
     textAlign: "center",
@@ -30,6 +33,15 @@ const styles = StyleSheet.create({
   tabUnderLine: {
     backgroundColor: '#0691ce',
   },
+
+  divider: {
+    height: 5,
+    borderStyle: "solid",
+    borderColor: "#8c8b8b",
+    borderWidth: 1,
+    borderRadius: 20,
+    paddingHorizontal: 5
+  }
 });
 
 export default styles;

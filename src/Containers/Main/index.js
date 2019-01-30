@@ -12,7 +12,7 @@ import PhotosGrid from "../../Components/PhotosGrid/PhotosGrid";
 import VideosGrid from "../../Components/VideosGrid/VideosGrid";
 import I18n from '../../i18n';
 import styles from "./styles";
-
+import { Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
 
 
 class MainScreen extends Component {
@@ -85,9 +85,33 @@ class MainScreen extends Component {
           </Animatable.View >
 
           {/* Settings Button */}
-          <TouchableOpacity style={styles.settingButton} onPress={this.languageChangeHandler}>
+          {/* <TouchableOpacity style={styles.settingButton} onPress={this.languageChangeHandler}>
             <Ionicons name="ios-settings" size={24} color="black" />
-          </TouchableOpacity>
+
+
+          </TouchableOpacity> */}
+
+          <View style={styles.settingButton}>
+            <Menu >
+              <MenuTrigger >
+                <Ionicons name="ios-settings" size={24} color="black" />
+              </MenuTrigger>
+
+              <MenuOptions customStyles={{
+                optionWrapper: {
+                  marginVertical: 5,
+                },
+                optionText:{
+                  textAlign: "center"
+                }
+              }}>
+                <MenuOption onSelect={this.languageChangeHandler} text='English' disabled={I18n.currentLocale() === 'en'} />
+                <View style={styles.divider}/>
+                <MenuOption onSelect={this.languageChangeHandler} text='عربي' disabled={I18n.currentLocale() === 'ar'}></MenuOption>
+              </MenuOptions>
+            </Menu>
+
+          </View>
 
 
           <ContactIcons
@@ -146,5 +170,6 @@ const mapStateToProps = (state) => {
     isConnected: state.network.isConnected
   }
 }
+
 
 export default connect(mapStateToProps)(MainScreen);

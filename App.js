@@ -4,6 +4,7 @@ import MainScreen from './src/Containers/Main';
 import { ReduxNetworkProvider } from 'react-native-offline';
 import { Provider } from 'react-redux';
 import store from './src/store/configuration';
+import { MenuProvider } from 'react-native-popup-menu';
 
 
 class MainScreenWithWrappedReduxNetworkProvider extends Component {
@@ -15,7 +16,9 @@ class MainScreenWithWrappedReduxNetworkProvider extends Component {
     return (
       <Provider store={store}>
         <ReduxNetworkProvider>
-          <MainScreen />
+          <MenuProvider>
+            <MainScreen />
+          </MenuProvider>
         </ReduxNetworkProvider>
       </Provider>
     );
