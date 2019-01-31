@@ -34,14 +34,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#0691ce',
   },
 
-  divider: {
-    height: 5,
-    borderStyle: "solid",
-    borderColor: "#8c8b8b",
-    borderWidth: 1,
-    borderRadius: 20,
-    paddingHorizontal: 5
-  }
+
 });
 
 export default styles;

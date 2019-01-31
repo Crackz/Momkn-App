@@ -1,15 +1,11 @@
 import { combineReducers, createStore, compose } from 'redux';
 import { reducer as networkReducer } from 'react-native-offline';
-// import citiesReducer from './reducers/citites';
-
-
-
-
+import languageReducer from './reducers/language';
 
 
 const rootReducer = combineReducers({
-    // cities: citiesReducer,
-    network: networkReducer
+    network: networkReducer,
+    language: languageReducer
 });
 
 

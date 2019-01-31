@@ -1,29 +1,23 @@
 import React, { Component } from "react";
-import { Image, TouchableOpacity } from "react-native";
-import * as Animatable from 'react-native-animatable';
-import { View } from "react-native-animatable";
+import { Image, View } from "react-native";
 import config from 'react-native-config';
-import ScrollableTabView from 'react-native-scrollable-tab-view';
-import Ionicons from "react-native-vector-icons/Ionicons";
 import { connect } from 'react-redux';
+import * as Animatable from 'react-native-animatable';
+import ScrollableTabView from 'react-native-scrollable-tab-view';
 import MainScreenLogo from '../../assets/images/MomknLogo.png';
 import ContactIcons from '../../Components/ContactIcons/ContactIcons';
 import PhotosGrid from "../../Components/PhotosGrid/PhotosGrid";
 import VideosGrid from "../../Components/VideosGrid/VideosGrid";
+import SettingsIcon from '../../Components/SettingsIcon/SettingsIcon';
 import I18n from '../../i18n';
 import styles from "./styles";
-import { Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
+import { changeLanguage } from '../../store/actions';
 
 
 class MainScreen extends Component {
 
   constructor(props) {
     super(props);
-
-    this.state = {
-      currentLanguage: I18n.currentLocale()
-    };
-
 
     this.photosPath = config.photosPath
       .replace('albumId', config.albumId)
@@ -38,15 +32,6 @@ class MainScreen extends Component {
 
 
 
-  languageChangeHandler = () => {
-    I18n.locale = I18n.currentLocale() === 'en' ? 'ar' : 'en';
-    this.setState((prevState) => {
-      return {
-        ...prevState,
-        currentLanguage: I18n.currentLocale()
-      }
-    })
-  }
 
   photosTransformResponseHandler = (res) => {
     if (res.error)
@@ -76,6 +61,9 @@ class MainScreen extends Component {
   }
 
   render() {
+    let { currentLanguage, languageChangeHandler } = this.props;
+
+
     return (
       <React.Fragment>
         <View style={styles.header}>
@@ -84,35 +72,7 @@ class MainScreen extends Component {
             <Image source={MainScreenLogo} style={{ width: 150, height: 150 }} />
           </Animatable.View >
 
-          {/* Settings Button */}
-          {/* <TouchableOpacity style={styles.settingButton} onPress={this.languageChangeHandler}>
-            <Ionicons name="ios-settings" size={24} color="black" />
-
-
-          </TouchableOpacity> */}
-
-          <View style={styles.settingButton}>
-            <Menu >
-              <MenuTrigger >
-                <Ionicons name="ios-settings" size={24} color="black" />
-              </MenuTrigger>
-
-              <MenuOptions customStyles={{
-                optionWrapper: {
-                  marginVertical: 5,
-                },
-                optionText:{
-                  textAlign: "center"
-                }
-              }}>
-                <MenuOption onSelect={this.languageChangeHandler} text='English' disabled={I18n.currentLocale() === 'en'} />
-                <View style={styles.divider}/>
-                <MenuOption onSelect={this.languageChangeHandler} text='عربي' disabled={I18n.currentLocale() === 'ar'}></MenuOption>
-              </MenuOptions>
-            </Menu>
-
-          </View>
-
+          <SettingsIcon currentLanguage={currentLanguage} onLanguageChange={languageChangeHandler} />
 
           <ContactIcons
             phoneNumber={config.phoneNumber}
@@ -136,24 +96,12 @@ class MainScreen extends Component {
           tabBarTextStyle={[styles.tabText, { fontFamily: I18n.currentLocale() === 'ar' ? 'Monadi' : 'Oranienbaum' }]}
         >
 
-          <View tabLabel={I18n.t('mainTabs.photosTabLabel', { language: this.state.currentLanguage })}>
+          <View tabLabel={I18n.t('mainTabs.photosTabLabel', { locale: currentLanguage })}>
             <PhotosGrid photosUrl={this.photosPath} transformResponse={this.photosTransformResponseHandler} />
           </View>
 
-          <View tabLabel={I18n.t('mainTabs.videosTabLabel', { language: this.state.currentLanguage })}>
+          <View tabLabel={I18n.t('mainTabs.videosTabLabel', { locale: currentLanguage })}>
             <VideosGrid videosUrl={this.videosPath} transformResponse={this.videosTransformResponseHandler} />
-            {/* [
-                {
-                  thumbnail: "https://scontent.xx.fbcdn.net/v/t15.5256-10/49934558_2216500305344013_7066558568836628480_n.jpg?_nc_cat=110&_nc_ht=scontent.xx&oh=0a949476c172b7fd7617982264fd3f6f&oe=5CF36185",
-                  uri: "https://scontent.xx.fbcdn.net/v/t42.1790-29/51496670_241088553475702_3166802999475981461_n.mp4?_nc_cat=101&efg=eyJybHIiOjUzMSwicmxhIjo1MTIsInZlbmNvZGVfdGFnIjoic2QifQ\u00253D\u00253D&rl=531&vabr=295&_nc_ht=scontent.xx&oh=725b58f520f4d57496a96907065ad29c&oe=5C531343",
-                  id: "1"
-                },
-                {
-                  // thumbnail: "https://scontent.xx.fbcdn.net/v/t15.5256-10/49934558_2216500305344013_7066558568836628480_n.jpg?_nc_cat=110&_nc_ht=scontent.xx&oh=0a949476c172b7fd7617982264fd3f6f&oe=5CF36185",
-                  uri: "https://www.radiantmediaplayer.com/media/bbb-360p.mp4",
-                  id: "2"
-                }
-              ] */}
           </View>
 
         </ScrollableTabView>
@@ -167,9 +115,18 @@ class MainScreen extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    isConnected: state.network.isConnected
+    isConnected: state.network.isConnected,
+    currentLanguage: state.language.currentLanguage
   }
 }
 
 
-export default connect(mapStateToProps)(MainScreen);
+const mapDispatchToProps = (dispatch) => {
+  return ({
+    languageChangeHandler: (language) => dispatch(changeLanguage(language))
+  })
+}
+
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(MainScreen);

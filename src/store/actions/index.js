@@ -1,1 +1,1 @@
-// export { addCity, deleteCity } from './cities'
+export { changeLanguage } from './languages'
