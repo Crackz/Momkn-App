@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import { createAppContainer, createStackNavigator } from "react-navigation";
-import MainScreen from './src/Containers/Main';
 import { ReduxNetworkProvider } from 'react-native-offline';
-import { Provider } from 'react-redux';
-import store from './src/store/configuration';
 import { MenuProvider } from 'react-native-popup-menu';
-
+import { createAppContainer, createStackNavigator } from "react-navigation";
+import { Provider } from 'react-redux';
+import MainScreen from './src/Containers/Main';
+import store from './src/store/configuration';
 
 class MainScreenWithWrappedReduxNetworkProvider extends Component {
   static navigationOptions = {
@@ -15,11 +14,11 @@ class MainScreenWithWrappedReduxNetworkProvider extends Component {
   render() {
     return (
       <Provider store={store}>
-        <ReduxNetworkProvider>
-          <MenuProvider>
-            <MainScreen />
-          </MenuProvider>
-        </ReduxNetworkProvider>
+          <ReduxNetworkProvider>
+            <MenuProvider>
+              <MainScreen />
+            </MenuProvider>
+          </ReduxNetworkProvider>
       </Provider>
     );
   }

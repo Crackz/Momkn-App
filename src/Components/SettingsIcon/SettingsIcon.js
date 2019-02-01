@@ -29,12 +29,6 @@ class SettingButton extends Component {
 }
 
 const styles = StyleSheet.create({
-    settingButton: {
-        position: 'absolute',
-        top: 20,
-        right: 20,
-        textAlign: "center"
-    },
     divider: {
         height: 5,
         borderStyle: "solid",
@@ -43,7 +37,6 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         paddingHorizontal: 5
     }
-
 })
 
 

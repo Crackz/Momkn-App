@@ -3,6 +3,14 @@ import { StyleSheet } from 'react-native';
 
 
 const styles = StyleSheet.create({
+  settingsMenu: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+    textAlign: "center" ,
+    zIndex: 1
+  },
+  
   header: {
     flex: 1,
     flexDirection: 'column',
@@ -24,7 +32,7 @@ const styles = StyleSheet.create({
 
   scrollableTabView: {
     flex: 2,
-
+    backgroundColor:"#F1FAEE"
   },
   tabText: {
     textAlign: "center",
@@ -33,6 +41,7 @@ const styles = StyleSheet.create({
   tabUnderLine: {
     backgroundColor: '#0691ce',
   },
+
 
 
 });

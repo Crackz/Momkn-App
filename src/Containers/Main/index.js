@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Image, View } from "react-native";
+import { Image, View, Text } from "react-native";
 import config from 'react-native-config';
 import { connect } from 'react-redux';
 import * as Animatable from 'react-native-animatable';
@@ -61,18 +61,22 @@ class MainScreen extends Component {
   }
 
   render() {
-    let { currentLanguage, languageChangeHandler } = this.props;
+    const { currentLanguage, languageChangeHandler } = this.props;
 
 
     return (
-      <React.Fragment>
+      <View style={{ flex: 1 }}>
+
+        <View style={styles.settingsMenu}>
+          <SettingsIcon currentLanguage={currentLanguage} onLanguageChange={languageChangeHandler} />
+        </View>
+
+
         <View style={styles.header}>
 
           <Animatable.View animation="fadeInDown" style={styles.logo}>
             <Image source={MainScreenLogo} style={{ width: 150, height: 150 }} />
           </Animatable.View >
-
-          <SettingsIcon currentLanguage={currentLanguage} onLanguageChange={languageChangeHandler} />
 
           <ContactIcons
             phoneNumber={config.phoneNumber}
@@ -89,6 +93,7 @@ class MainScreen extends Component {
         <ScrollableTabView
           style={styles.scrollableTabView}
           initialPage={0}
+          tabBarPosition="bottom"
           tabBarUnderlineStyle={styles.tabUnderLine}
           tabBarBackgroundColor={"#457B9D"}
           tabBarActiveTextColor={"#FFFFFF"}
@@ -106,7 +111,7 @@ class MainScreen extends Component {
 
         </ScrollableTabView>
 
-      </React.Fragment>
+      </View>
     );
   }
 }
