@@ -6,7 +6,7 @@ import * as Animatable from 'react-native-animatable';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
 import MainScreenLogo from '../../assets/images/MomknLogo.png';
 import ContactIcons from '../../Components/ContactIcons/ContactIcons';
-import PhotosGrid from "../../Components/PhotosGrid/PhotosGrid";
+import PhotosGrid from "../PhotosGrid/PhotosGrid";
 import VideosGrid from "../../Components/VideosGrid/VideosGrid";
 import SettingsIcon from '../../Components/SettingsIcon/SettingsIcon';
 import I18n from '../../i18n';
@@ -102,7 +102,7 @@ class MainScreen extends Component {
         >
 
           <View tabLabel={I18n.t('mainTabs.photosTabLabel', { locale: currentLanguage })}>
-            <PhotosGrid photosUrl={this.photosPath} transformResponse={this.photosTransformResponseHandler} />
+            <PhotosGrid />
           </View>
 
           <View tabLabel={I18n.t('mainTabs.videosTabLabel', { locale: currentLanguage })}>

@@ -1,16 +1,40 @@
-import { FETCH_PHOTOS_SUCCESS } from './action-types';
+import { FETCH_PHOTOS, FETCH_PHOTOS_SUCCESS } from './action-types';
 
 
 
-export const fetchPhotos = (url) => {
+export const fetchPhotos = (url, uiState = {}, extraActionData = {}) => {
     function thunk(dispatch) {
+        dispatch({
+            type: FETCH_PHOTOS,
+            uiState
+        });
+
         fetch(url)
             .then((response) => response.json())
             .then((responseJson) => {
+
+                console.log('BEFORE: ', {
+                    type: FETCH_PHOTOS_SUCCESS,
+                    imgsData: responseJson.data.map(
+                        (imgData) => ({
+                            id: imgData.id,
+                            source: { uri: imgData.source },
+                            updatedDate: imgData.updated_time
+                        })
+                    ),
+                    nextPage: responseJson.paging && responseJson.paging.next || null,
+                    ...extraActionData
+                });
                 dispatch({
                     type: FETCH_PHOTOS_SUCCESS,
-                    imgsData: responseJson.data.map((imgData) => ({ id: imgData.id, source: { uri: imgData.source } })),
-                    nextPage: responseJson.paging && responseJson.paging.next || null
+                    imgsData: responseJson.data.map(
+                        (imgData) => ({
+                            id: imgData.id,
+                            source: { uri: imgData.source }, updatedDate: imgData.updated_time
+                        })
+                    ),
+                    nextPage: responseJson.paging && responseJson.paging.next || null,
+                    ...extraActionData
                 });
             })
             .catch((error) => {
@@ -19,6 +43,10 @@ export const fetchPhotos = (url) => {
     };
 
     thunk.interceptInOffline = true;
+    thunk.meta = {
+        retry: true,
+        name: 'fetchPhotos',
+        args: [url, uiState, extraActionData],
+    };
     return thunk;
 };
-

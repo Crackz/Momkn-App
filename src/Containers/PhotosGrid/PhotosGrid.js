@@ -1,87 +1,65 @@
 import debounce from 'lodash.debounce';
 import React, { Component } from 'react';
 import { ActivityIndicator, FlatList, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import config from 'react-native-config';
 import ImageView from 'react-native-image-view';
-
-
+import { connect } from 'react-redux';
+import { fetchPhotos } from '../../store/actions';
 
 class PhotosGrid extends Component {
-    state = {
-        isImageViewVisible: false,
-        imageIndex: null,
-        refreshing: false,
-        loading: false,
-        imgsSourcesAndIds: [],
-        error: null,
+
+    constructor(props) {
+        super(props);
+
+        this.photosPath = config.photosPath
+            .replace('albumId', config.albumId)
+            .replace('photosLimit', config.photosLimit)
+            .replace('accessToken', config.accessToken);
+
+
+        this.state = {
+            isImageViewVisible: false,
+            imageIndex: null,
+            error: null,
+        }
+
     }
 
+
     componentDidMount() {
-        this.requestPhotos();
+        this.props.fetchPhotos(this.photosPath, { isFetching: true });
     }
 
     handlePhotosRefreshHandler = () => {
-        this.setState({ refreshing: true }, () => this.requestPhotos());
+        this.props.fetchPhotos(this.photosPath, { isFetching: true });
     }
 
 
     renderPhotosFooter = () => {
-        if (!this.state.loading) return null;
+        if (!this.props.isFetching) return null;
 
         return (
             <View style={{ paddingVertical: 20, borderTopWidth: 1, borderColor: "#CED0CE" }}>
-                <ActivityIndicator animating={this.state.loading} size="large" />
+                <ActivityIndicator animating={this.props.isFetching} size="large" />
             </View>
         );
     };
 
     loadMorePhotos = () => {
-        const { nextPage } = this.state;
-        if (!nextPage) return;
-
-        this.requestPhotos(nextPage);
+        if (!this.props.nextPage) return; // ToDo add an indicator for page end
+        this.props.fetchPhotos(this.props.nextPage, { isFetching: true }, { isLoadMore: true });
     }
-
-    requestPhotos = (photoPath) => {
-
-        this.setState({ loading: true });
-        fetch(photoPath || this.props.photosUrl)
-            .then(res => res.json())
-            .then(res => {
-                const { imgsSourcesAndIds, nextPage, error } = this.props.transformResponse(res);
-
-                if (error) {
-                    this.setState({ loading: false, error, refreshing: false });
-                    return alert('Error: ' + error.message);
-                }
-
-
-                this.setState((prevState) => {
-                    return {
-                        ...prevState,
-                        imgsSourcesAndIds: prevState.refreshing ? imgsSourcesAndIds : [...prevState.imgsSourcesAndIds, ...imgsSourcesAndIds],
-                        loading: false,
-                        refreshing: false,
-                        error,
-                        nextPage
-                    }
-                })
-            })
-            .catch(error => {
-                console.log('CAUGHT ERR: ', error);
-                this.setState({ error, loading: false, refreshing: false });
-            });
-    };
-
 
 
     render() {
+        const { isFetching, imgsData } = this.props;
 
         return (
             <React.Fragment>
 
                 <FlatList
                     columnWrapperStyle={styles.columnWrapperStyle}
-                    data={this.state.imgsSourcesAndIds}
+                    data={imgsData}
                     numColumns={2}
                     keyExtractor={item => item.id}
                     horizontal={false}
@@ -97,7 +75,7 @@ class PhotosGrid extends Component {
                     }}
                     // removeClippedSubviews={true}
                     ListFooterComponent={this.renderPhotosFooter}
-                    refreshing={this.state.refreshing}
+                    refreshing={isFetching}
                     onRefresh={this.handlePhotosRefreshHandler}
                     // OnEndedReached is triggered twice so this workaround is fine for now.
                     onEndReached={debounce(this.loadMorePhotos, 500)}
@@ -107,7 +85,7 @@ class PhotosGrid extends Component {
 
                 <ImageView
                     glideAlways
-                    images={this.state.imgsSourcesAndIds}
+                    images={imgsData}
                     imageIndex={this.state.imageIndex}
                     animationType="fade"
                     isVisible={this.state.isImageViewVisible}
@@ -134,4 +112,23 @@ const styles = StyleSheet.create({
     }
 })
 
-export default PhotosGrid;
+
+const mapStateToProps = (state) => {
+    return {
+        imgsData: state.photos.imgsData,
+        isFetching: state.photos.isFetching,
+        nextPage: state.photos.nextPage,
+        isConnected: state.network.isConnected,
+    }
+}
+
+
+const mapDispatchToProps = (dispatch) => {
+    return ({
+        fetchPhotos: (url, newUiState, extraActionData) => dispatch(fetchPhotos(url, newUiState, extraActionData)),
+    })
+}
+
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(PhotosGrid);
