@@ -1,10 +1,11 @@
 import debounce from 'lodash.debounce';
 import React, { Component } from 'react';
-import { ActivityIndicator, FlatList, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, FlatList, Image, StyleSheet, TouchableOpacity, View, Text } from 'react-native';
 import config from 'react-native-config';
 import ImageView from 'react-native-image-view';
 import { connect } from 'react-redux';
 import { fetchPhotos } from '../../store/actions';
+import Warning from '../../Components/Warning/Warning';
 
 class PhotosGrid extends Component {
 
@@ -52,7 +53,11 @@ class PhotosGrid extends Component {
 
 
     render() {
-        const { isFetching, imgsData } = this.props;
+        const { isConnected, isFetching, imgsData } = this.props;
+
+        if (!imgsData && !isConnected)
+            return <Warning style={{ flex: 1 }} text={"سيقوم البرنامج تلقائيا بالتحديث عند توفر الانترنت"} />
+
 
         return (
             <React.Fragment>

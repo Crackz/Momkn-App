@@ -9,41 +9,40 @@ import languageReducer from './reducers/language';
 import { networkTransform } from './configure-persist';
 import photosReducer from './reducers/photos';
 
+const persistConfig = {
+    key: 'root',
+    storage,
+    transforms: [networkTransform],
+    blacklist: ['network']
+}
+
+const networkMiddleware = createNetworkMiddleware();
+
+const middlewares = [networkMiddleware, thunk];
+
+const rootReducer = combineReducers({
+    network: networkReducer,
+    language: languageReducer,
+    photos: photosReducer
+});
+
+const persistanceReducer = persistReducer(persistConfig, rootReducer);
+
+
+
+let composeEnhancers = compose;
+if (__DEV__) {
+    composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+}
+
+const store = createStore(persistanceReducer, composeEnhancers(applyMiddleware(...middlewares)));
+
+
 export default function configureStore(callback) {
-
-    const persistConfig = {
-        key: 'root',
-        storage,
-        transforms: [networkTransform],
-        blacklist: ['network']
-    }
-
-    const networkMiddleware = createNetworkMiddleware();
-
-
-    const rootReducer = combineReducers({
-        network: networkReducer,
-        language: languageReducer,
-        photos: photosReducer
-    });
-
-    const persistedReducer = persistReducer(persistConfig, rootReducer);
-
-    let composeEnhancers = compose;
-    if (__DEV__) {
-        composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION__ || compose;
-    }
-
-
-    const store = createStore(persistedReducer, composeEnhancers(applyMiddleware(networkMiddleware, thunk)));
 
     persistStore(store, null, () => {
         // After rehydration completes, we detect initial connection
-        checkInternetConnection().then(isConnected => {
-            console.log('ISCONNECT: ', isConnected, 'SS:', {
-                type: offlineActionTypes.CONNECTION_CHANGE,
-                payload: isConnected,
-            })
+        checkInternetConnection('https://www.google.com/', 500).then(isConnected => {
             store.dispatch({
                 type: offlineActionTypes.CONNECTION_CHANGE,
                 payload: isConnected,

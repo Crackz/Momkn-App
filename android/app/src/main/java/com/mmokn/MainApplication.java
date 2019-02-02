@@ -3,10 +3,11 @@ package com.mmokn;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.lugg.ReactNativeConfig.ReactNativeConfigPackage;
 import com.brentvatne.react.ReactVideoPackage;
-import com.reactcommunity.rnlanguages.RNLanguagesPackage;
+
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -28,9 +29,9 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new SplashScreenReactPackage(),
             new ReactNativeConfigPackage(),
             new ReactVideoPackage(),
-            new RNLanguagesPackage(),
             new RNGestureHandlerPackage(),
             new VectorIconsPackage()
       );

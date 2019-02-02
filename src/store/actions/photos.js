@@ -12,19 +12,6 @@ export const fetchPhotos = (url, uiState = {}, extraActionData = {}) => {
         fetch(url)
             .then((response) => response.json())
             .then((responseJson) => {
-
-                console.log('BEFORE: ', {
-                    type: FETCH_PHOTOS_SUCCESS,
-                    imgsData: responseJson.data.map(
-                        (imgData) => ({
-                            id: imgData.id,
-                            source: { uri: imgData.source },
-                            updatedDate: imgData.updated_time
-                        })
-                    ),
-                    nextPage: responseJson.paging && responseJson.paging.next || null,
-                    ...extraActionData
-                });
                 dispatch({
                     type: FETCH_PHOTOS_SUCCESS,
                     imgsData: responseJson.data.map(

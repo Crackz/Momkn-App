@@ -1,17 +1,18 @@
 import React, { Component } from "react";
-import { Image, View, Text } from "react-native";
-import config from 'react-native-config';
-import { connect } from 'react-redux';
+import { Image, View } from "react-native";
 import * as Animatable from 'react-native-animatable';
+import config from 'react-native-config';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
+import SplashScreen from 'react-native-splash-screen';
+import { connect } from 'react-redux';
 import MainScreenLogo from '../../assets/images/MomknLogo.png';
 import ContactIcons from '../../Components/ContactIcons/ContactIcons';
-import PhotosGrid from "../PhotosGrid/PhotosGrid";
-import VideosGrid from "../../Components/VideosGrid/VideosGrid";
 import SettingsIcon from '../../Components/SettingsIcon/SettingsIcon';
+import VideosGrid from "../../Components/VideosGrid/VideosGrid";
 import I18n from '../../i18n';
-import styles from "./styles";
 import { changeLanguage } from '../../store/actions';
+import PhotosGrid from "../PhotosGrid";
+import styles from "./styles";
 
 
 class MainScreen extends Component {
@@ -30,6 +31,10 @@ class MainScreen extends Component {
       .replace('accessToken', config.accessToken)
   }
 
+  componentDidMount() {
+    SplashScreen.hide();
+
+  }
 
 
 
@@ -62,8 +67,6 @@ class MainScreen extends Component {
 
   render() {
     const { currentLanguage, languageChangeHandler } = this.props;
-
-
     return (
       <View style={{ flex: 1 }}>
 
@@ -75,10 +78,13 @@ class MainScreen extends Component {
         <View style={styles.header}>
 
           <Animatable.View animation="fadeInDown" style={styles.logo}>
-            <Image source={MainScreenLogo} style={{ width: 150, height: 150 }} />
+            <Image source={MainScreenLogo} style={{ width: 150, flex: 1 }} />
           </Animatable.View >
 
           <ContactIcons
+            styles={{
+
+            }}
             phoneNumber={config.phoneNumber}
             whatsAppPhoneNumber={config.whatsAppPhoneNumber}
             navigateToLocation={{
@@ -95,13 +101,13 @@ class MainScreen extends Component {
           initialPage={0}
           tabBarPosition="bottom"
           tabBarUnderlineStyle={styles.tabUnderLine}
-          tabBarBackgroundColor={"#457B9D"}
-          tabBarActiveTextColor={"#FFFFFF"}
+          tabBarBackgroundColor={"#E63946"}
+          tabBarActiveTextColor={"#F1FAEE"}
           tabBarInactiveTextColor={"#fff8"}
-          tabBarTextStyle={[styles.tabText, { fontFamily: I18n.currentLocale() === 'ar' ? 'Monadi' : 'Oranienbaum' }]}
+          tabBarTextStyle={[styles.tabText, { fontFamily: currentLanguage === 'ar' ? 'Monadi' : 'Oranienbaum' }]}
         >
 
-          <View tabLabel={I18n.t('mainTabs.photosTabLabel', { locale: currentLanguage })}>
+          <View tabLabel={I18n.t('mainTabs.photosTabLabel', { locale: currentLanguage })} style={{ flex: 1 }}>
             <PhotosGrid />
           </View>
 

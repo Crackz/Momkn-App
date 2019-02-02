@@ -1,9 +1,12 @@
-import * as actions from './actions';
+import { fetchPhotosThroughRefreshing, fetchPhotos } from './actions';
 import { createTransform } from 'redux-persist';
 
 // We have to map our actions to an object
-console.log(actions, typeof actions);
 
+const actions = {
+    fetchPhotos,
+    fetchPhotosThroughRefreshing
+}
 
 // Transform how the persistor reads the network state
 export const networkTransform = createTransform(

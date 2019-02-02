@@ -7,10 +7,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 20,
     right: 20,
-    textAlign: "center" ,
+    textAlign: "center",
     zIndex: 1
   },
-  
+
   header: {
     flex: 1,
     flexDirection: 'column',
@@ -29,17 +29,20 @@ const styles = StyleSheet.create({
     right: 20,
     textAlign: "center"
   },
+  contactIcons: {
+    backgroundColor: '#F1FAEE',
 
+  },
   scrollableTabView: {
     flex: 2,
-    backgroundColor:"#F1FAEE"
+    backgroundColor: "#F1FAEE"
   },
   tabText: {
     textAlign: "center",
     paddingTop: 5,
   },
   tabUnderLine: {
-    backgroundColor: '#0691ce',
+    backgroundColor: '#F1FAEE',
   },
 
 

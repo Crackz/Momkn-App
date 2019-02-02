@@ -55,7 +55,8 @@ class ContactIcons extends Component {
     render() {
 
         return (
-            <View style={styles.contactIcons}>
+
+            <View style={[styles.contactIcons, this.props.styles]}>
 
                 <TouchableOpacity style={styles.roundedButton} onPress={() => this.messageToWhatsApp(this.props.whatsAppPhoneNumber)} >
                     <AnimatedIcon animation="pulse" easing="ease-out" iterationCount="infinite" name="logo-whatsapp" size={32} color="#4FCE5D" />
@@ -85,7 +86,6 @@ const styles = StyleSheet.create({
     contactIcons: {
         flex: 1,
         flexDirection: "row",
-        backgroundColor: '#F1FAEE',
         justifyContent: 'space-around',
         alignItems: 'center',
         borderBottomColor: '#2d324f',

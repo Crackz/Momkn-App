@@ -1,8 +1,8 @@
 import debounce from 'lodash.debounce';
 import React, { Component } from 'react';
-import { ActivityIndicator, FlatList, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
-
+import { ActivityIndicator, FlatList, View } from 'react-native';
 import VideoPlayer from '../VideoPlayer/VideoPlayer';
+
 
 
 class VideosGrid extends Component {
@@ -93,17 +93,17 @@ class VideosGrid extends Component {
                 // OnEndedReached is triggered twice so this workaround is fine for now.
                 onEndReached={debounce(this.loadMoreVideos, 500)}
                 onEndReachedThreshold={.01}
-                // removeClippedSubviews={true}
+            // removeClippedSubviews={true}
 
-                // ItemSeparatorComponent={() => (
-                //   <View style={{
-                //     height: 5,
-                //     borderStyle: "solid",
-                //     borderColor: "#8c8b8b",
-                //     borderWidth: 1,
-                //     borderRadius: 20,
-                //     paddingHorizontal: 5
-                //   }}>
+            // ItemSeparatorComponent={() => (
+            //   <View style={{
+            //     height: 5,
+            //     borderStyle: "solid",
+            //     borderColor: "#8c8b8b",
+            //     borderWidth: 1,
+            //     borderRadius: 20,
+            //     paddingHorizontal: 5
+            //   }}>
 
             />
         );

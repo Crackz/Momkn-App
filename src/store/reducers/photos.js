@@ -1,7 +1,6 @@
 import { FETCH_PHOTOS_SUCCESS, FETCH_PHOTOS, FETCH_PHOTOS_WITH_REFRESHING } from '../actions/action-types';
 
 const initialState = {
-    imgsData: [],
     isFetching: false
 }
 
