@@ -4,6 +4,6 @@
     "photosTabLabel": "Photos",
     "videosTabLabel": "Videos"
   },
-  "warningText": "Content will be updated automatically when connection is available",
+  "warningText": "No Connection",
   "emptyContentText": "There is no content yet."
 }

@@ -1,4 +1,4 @@
-package com.mmokn;
+package com.momkn;
 
 import android.app.Application;
 
