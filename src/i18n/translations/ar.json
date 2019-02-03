@@ -3,6 +3,8 @@
   "mainTabs": {
     "photosTabLabel": "الصور",
     "videosTabLabel": "الفيديوهات"
-  }
-}
+  },
+  "warningText": "سيقوم البرنامج تلقائيا بالتحديث عند توفر الانترنت",
+  "emptyContentText": "لم يتم اضافة محتوي ^_^ بعد"
 
+}

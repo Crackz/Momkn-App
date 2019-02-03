@@ -3,5 +3,7 @@
   "mainTabs": {
     "photosTabLabel": "Photos",
     "videosTabLabel": "Videos"
-  }
+  },
+  "warningText": "Content will be updated automatically when connection is available",
+  "emptyContentText": "There is no content yet."
 }

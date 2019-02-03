@@ -1,12 +1,13 @@
 import debounce from 'lodash.debounce';
 import React, { Component } from 'react';
-import { ActivityIndicator, FlatList, View } from 'react-native';
+import { ActivityIndicator, FlatList, View, StyleSheet } from 'react-native';
 import VideoPlayer from '../../Components/VideoPlayer/VideoPlayer';
 import config from 'react-native-config';
-import Warning from '../../Components/Warning/Warning';
 import { connect } from 'react-redux';
 import { fetchVideos } from '../../store/actions';
-
+import Empty from '../../Components/Empty/Empty';
+import Warning from '../../Components/Warning/Warning';
+import I18n from '../../i18n';
 
 class VideosGrid extends Component {
 
@@ -44,15 +45,23 @@ class VideosGrid extends Component {
         this.props.fetchPhotos(this.props.nextPage, { isFetchingVideos: true }, { isLoadMore: true });
     }
 
+    renderEmptyComponent = () => (
+        <Empty
+            style={styles.emptyComponent}
+            text={I18n.t("emptyContentText", { locale: this.props.currentLanguage })}
+        />
+    )
+
     render() {
-        const { isConnected, isFetchingVideos, videosData } = this.props;
+        const { isConnected, isFetchingVideos, videosData, currentLanguage } = this.props;
 
         if (!videosData && !isConnected)
-            return <Warning style={{ flex: 1 }} text={"سيقوم البرنامج بالتحديث تلقائيا عند توفر الانترنت"} />
+            return <Warning style={{ flex: 1 }} text={I18n.t("warningText", { locale: currentLanguage })} />
 
         return (
             <FlatList
-                data={this.props.videosData}
+                contentContainerStyle={styles.contentContainerStyle}
+                data={[]}//this.props.videosData}
                 numColumns={1}
                 keyExtractor={item => item.id}
                 horizontal={false}
@@ -64,6 +73,7 @@ class VideosGrid extends Component {
                     );
                 }}
                 ListFooterComponent={this.renderVideosFooter}
+                ListEmptyComponent={this.renderEmptyComponent}
                 refreshing={isFetchingVideos}
                 onRefresh={this.videosRefreshHandler}
                 // OnEndedReached is triggered twice so this workaround is fine for now.
@@ -77,6 +87,16 @@ class VideosGrid extends Component {
 
 
 
+const styles = StyleSheet.create({
+    contentContainerStyle: {
+        flexGrow: 1
+    },
+    emptyComponent: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    }
+})
 
 const mapStateToProps = (state) => {
     return {
@@ -84,6 +104,7 @@ const mapStateToProps = (state) => {
         isFetchingVideos: state.videos.isFetchingVideos,
         nextPage: state.videos.nextPage,
         isConnected: state.network.isConnected,
+        currentLanguage: state.language.currentLanguage
     }
 }
 

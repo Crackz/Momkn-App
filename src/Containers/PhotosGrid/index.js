@@ -5,7 +5,9 @@ import config from 'react-native-config';
 import ImageView from 'react-native-image-view';
 import { connect } from 'react-redux';
 import { fetchPhotos } from '../../store/actions';
+import Empty from '../../Components/Empty/Empty';
 import Warning from '../../Components/Warning/Warning';
+import I18n from '../../i18n';
 
 class PhotosGrid extends Component {
 
@@ -51,20 +53,26 @@ class PhotosGrid extends Component {
         this.props.fetchPhotos(this.props.nextPage, { isFetchingPhotos: true }, { isLoadMore: true });
     }
 
+    renderEmptyComponent = () => (
+        <Empty
+            style={styles.emptyComponent}
+            text={I18n.t("emptyContentText", { locale: this.props.currentLanguage })}
+        />
+    )
 
     render() {
-        const { isConnected, isFetchingPhotos, imgsData } = this.props;
+        const { isConnected, isFetchingPhotos, imgsData, currentLanguage } = this.props;
 
         if (!imgsData && !isConnected)
-            return <Warning style={{ flex: 1 }} text={"سيقوم البرنامج تلقائيا بالتحديث عند توفر الانترنت"} />
-
+            return <Warning style={{ flex: 1 }} text={I18n.t("warningText", { locale: currentLanguage })} />
 
         return (
             <React.Fragment>
 
                 <FlatList
+                    contentContainerStyle={styles.contentContainerStyle}
                     columnWrapperStyle={styles.columnWrapperStyle}
-                    data={imgsData}
+                    data={[]}
                     numColumns={2}
                     keyExtractor={item => item.id}
                     horizontal={false}
@@ -72,14 +80,13 @@ class PhotosGrid extends Component {
                         return (
                             <TouchableOpacity key={item.id} style={styles.imageCell}
                                 onPress={() => { this.setState({ imageIndex: index, isImageViewVisible: true }); }}>
-
                                 <Image style={styles.image} source={item.source} resizeMethod="resize" />
-
                             </TouchableOpacity>
                         );
                     }}
                     // removeClippedSubviews={true}
                     ListFooterComponent={this.renderPhotosFooter}
+                    ListEmptyComponent={this.renderEmptyComponent}
                     refreshing={isFetchingPhotos}
                     onRefresh={this.photosRefreshHandler}
                     // OnEndedReached is triggered twice so this workaround is fine for now.
@@ -103,6 +110,9 @@ class PhotosGrid extends Component {
 }
 
 const styles = StyleSheet.create({
+    contentContainerStyle: {
+        flexGrow: 1
+    },
     columnWrapperStyle: {
         flex: 1,
         flexWrap: 'wrap',
@@ -114,6 +124,11 @@ const styles = StyleSheet.create({
     },
     image: {
         height: 200
+    },
+    emptyComponent: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
     }
 })
 
@@ -124,6 +139,7 @@ const mapStateToProps = (state) => {
         isFetchingPhotos: state.photos.isFetchingPhotos,
         nextPage: state.photos.nextPage,
         isConnected: state.network.isConnected,
+        currentLanguage: state.language.currentLanguage
     }
 }
 
