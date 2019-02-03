@@ -11,7 +11,6 @@ import languageReducer from './reducers/language';
 
 import { networkTransform } from './configure-persist';
 
-import SplashScreen from 'react-native-splash-screen';
 
 const persistConfig = {
     key: 'root',
@@ -44,15 +43,10 @@ const store = createStore(persistanceReducer, composeEnhancers(applyMiddleware(.
 
 
 export default function configureStore(callback) {
-    SplashScreen.hide();
-
     persistStore(store, null, async () => {
         console.log('INVOKED1: 200');
         // After rehydration completes, we detect initial connection
         let isConnected = await checkInternetConnection('https://www.google.com/', 200);
-        console.log('INVOKED2: ' + isConnected);
-
-
         store.dispatch({
             type: offlineActionTypes.CONNECTION_CHANGE,
             payload: isConnected,
