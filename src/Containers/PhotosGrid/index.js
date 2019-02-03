@@ -38,15 +38,15 @@ class PhotosGrid extends Component {
     }
 
 
-    renderPhotosFooter = () => {
-        if (!this.props.isFetchingPhotos) return null;
+    // renderPhotosFooter = () => {
+    //     if (!this.props.isFetchingPhotos) return null;
 
-        return (
-            <View style={{ paddingVertical: 20, borderTopWidth: 1, borderColor: "#CED0CE" }}>
-                <ActivityIndicator animating={this.props.isFetchingPhotos} size="large" />
-            </View>
-        );
-    };
+    //     return (
+    //         <View style={{ paddingVertical: 20, borderTopWidth: 1, borderColor: "#CED0CE" }}>
+    //             <ActivityIndicator animating={this.props.isFetchingPhotos} size="large" />
+    //         </View>
+    //     );
+    // };
 
     loadMorePhotos = () => {
         if (!this.props.nextPage) return;
@@ -72,7 +72,7 @@ class PhotosGrid extends Component {
                 <FlatList
                     contentContainerStyle={styles.contentContainerStyle}
                     columnWrapperStyle={styles.columnWrapperStyle}
-                    data={[]}
+                    data={imgsData}
                     numColumns={2}
                     keyExtractor={item => item.id}
                     horizontal={false}
@@ -85,7 +85,7 @@ class PhotosGrid extends Component {
                         );
                     }}
                     // removeClippedSubviews={true}
-                    ListFooterComponent={this.renderPhotosFooter}
+                    // ListFooterComponent={this.renderPhotosFooter}
                     ListEmptyComponent={this.renderEmptyComponent}
                     refreshing={isFetchingPhotos}
                     onRefresh={this.photosRefreshHandler}

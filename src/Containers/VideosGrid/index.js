@@ -30,15 +30,15 @@ class VideosGrid extends Component {
     }
 
 
-    renderVideosFooter = () => {
-        if (!this.props.isFetchingVideos) return null;
+    // renderVideosFooter = () => {
+    //     if (!this.props.isFetchingVideos) return null;
 
-        return (
-            <View style={{ paddingVertical: 20, borderTopWidth: 1, borderColor: "#CED0CE" }}>
-                <ActivityIndicator animating={this.props.isFetchingVideos} size="large" />
-            </View>
-        );
-    };
+    //     return (
+    //         <View style={{ paddingVertical: 20, borderTopWidth: 1, borderColor: "#CED0CE" }}>
+    //             <ActivityIndicator animating={this.props.isFetchingVideos} size="large" />
+    //         </View>
+    //     );
+    // };
 
     loadMoreVideos = () => {
         if (!this.props.nextPage) return;
@@ -61,7 +61,7 @@ class VideosGrid extends Component {
         return (
             <FlatList
                 contentContainerStyle={styles.contentContainerStyle}
-                data={[]}//this.props.videosData}
+                data={videosData}//this.props.videosData}
                 numColumns={1}
                 keyExtractor={item => item.id}
                 horizontal={false}
@@ -72,7 +72,7 @@ class VideosGrid extends Component {
                         </View>
                     );
                 }}
-                ListFooterComponent={this.renderVideosFooter}
+                // ListFooterComponent={this.renderVideosFooter}
                 ListEmptyComponent={this.renderEmptyComponent}
                 refreshing={isFetchingVideos}
                 onRefresh={this.videosRefreshHandler}
