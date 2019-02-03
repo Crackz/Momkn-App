@@ -28,32 +28,32 @@ class PhotosGrid extends Component {
 
 
     componentDidMount() {
-        this.props.fetchPhotos(this.photosPath, { isFetching: true });
+        this.props.fetchPhotos(this.photosPath, { isFetchingPhotos: true });
     }
 
-    handlePhotosRefreshHandler = () => {
-        this.props.fetchPhotos(this.photosPath, { isFetching: true });
+    photosRefreshHandler = () => {
+        this.props.fetchPhotos(this.photosPath, { isFetchingPhotos: true });
     }
 
 
     renderPhotosFooter = () => {
-        if (!this.props.isFetching) return null;
+        if (!this.props.isFetchingPhotos) return null;
 
         return (
             <View style={{ paddingVertical: 20, borderTopWidth: 1, borderColor: "#CED0CE" }}>
-                <ActivityIndicator animating={this.props.isFetching} size="large" />
+                <ActivityIndicator animating={this.props.isFetchingPhotos} size="large" />
             </View>
         );
     };
 
     loadMorePhotos = () => {
-        if (!this.props.nextPage) return; // ToDo add an indicator for page end
-        this.props.fetchPhotos(this.props.nextPage, { isFetching: true }, { isLoadMore: true });
+        if (!this.props.nextPage) return;
+        this.props.fetchPhotos(this.props.nextPage, { isFetchingPhotos: true }, { isLoadMore: true });
     }
 
 
     render() {
-        const { isConnected, isFetching, imgsData } = this.props;
+        const { isConnected, isFetchingPhotos, imgsData } = this.props;
 
         if (!imgsData && !isConnected)
             return <Warning style={{ flex: 1 }} text={"سيقوم البرنامج تلقائيا بالتحديث عند توفر الانترنت"} />
@@ -80,8 +80,8 @@ class PhotosGrid extends Component {
                     }}
                     // removeClippedSubviews={true}
                     ListFooterComponent={this.renderPhotosFooter}
-                    refreshing={isFetching}
-                    onRefresh={this.handlePhotosRefreshHandler}
+                    refreshing={isFetchingPhotos}
+                    onRefresh={this.photosRefreshHandler}
                     // OnEndedReached is triggered twice so this workaround is fine for now.
                     onEndReached={debounce(this.loadMorePhotos, 500)}
                     onEndReachedThreshold={.01}
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
     return {
         imgsData: state.photos.imgsData,
-        isFetching: state.photos.isFetching,
+        isFetchingPhotos: state.photos.isFetchingPhotos,
         nextPage: state.photos.nextPage,
         isConnected: state.network.isConnected,
     }

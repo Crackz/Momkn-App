@@ -1,2 +1,3 @@
 export { changeLanguage } from './languages'
-export { fetchPhotos, fetchPhotosThroughRefreshing } from './photos';
+export { fetchPhotos } from './photos';
+export { fetchVideos } from './videos';

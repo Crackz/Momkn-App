@@ -5,9 +5,13 @@ import {
 import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import thunk from 'redux-thunk';
-import languageReducer from './reducers/language';
-import { networkTransform } from './configure-persist';
 import photosReducer from './reducers/photos';
+import videosReducer from './reducers/videos';
+import languageReducer from './reducers/language';
+
+import { networkTransform } from './configure-persist';
+
+import SplashScreen from 'react-native-splash-screen';
 
 const persistConfig = {
     key: 'root',
@@ -23,7 +27,8 @@ const middlewares = [networkMiddleware, thunk];
 const rootReducer = combineReducers({
     network: networkReducer,
     language: languageReducer,
-    photos: photosReducer
+    photos: photosReducer,
+    videos: videosReducer
 });
 
 const persistanceReducer = persistReducer(persistConfig, rootReducer);
@@ -39,16 +44,20 @@ const store = createStore(persistanceReducer, composeEnhancers(applyMiddleware(.
 
 
 export default function configureStore(callback) {
+    SplashScreen.hide();
 
-    persistStore(store, null, () => {
+    persistStore(store, null, async () => {
+        console.log('INVOKED1: 200');
         // After rehydration completes, we detect initial connection
-        checkInternetConnection('https://www.google.com/', 500).then(isConnected => {
-            store.dispatch({
-                type: offlineActionTypes.CONNECTION_CHANGE,
-                payload: isConnected,
-            });
-            callback(); // Notify our root component we are good to go, so that we can render our app
+        let isConnected = await checkInternetConnection('https://www.google.com/', 200);
+        console.log('INVOKED2: ' + isConnected);
+
+
+        store.dispatch({
+            type: offlineActionTypes.CONNECTION_CHANGE,
+            payload: isConnected,
         });
+        callback(); // Notify our root component we are good to go, so that we can render our app
     });
 
     return store;

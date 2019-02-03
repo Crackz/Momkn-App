@@ -8,62 +8,19 @@ import { connect } from 'react-redux';
 import MainScreenLogo from '../../assets/images/MomknLogo.png';
 import ContactIcons from '../../Components/ContactIcons/ContactIcons';
 import SettingsIcon from '../../Components/SettingsIcon/SettingsIcon';
-import VideosGrid from "../../Components/VideosGrid/VideosGrid";
 import I18n from '../../i18n';
 import { changeLanguage } from '../../store/actions';
 import PhotosGrid from "../PhotosGrid";
+import VideosGrid from "../VideosGrid";
 import styles from "./styles";
 
 
 class MainScreen extends Component {
 
-  constructor(props) {
-    super(props);
-
-    this.photosPath = config.photosPath
-      .replace('albumId', config.albumId)
-      .replace('photosLimit', config.photosLimit)
-      .replace('accessToken', config.accessToken);
-
-    this.videosPath = config.videosPath
-      .replace('pageId', config.pageId)
-      .replace('videosLimit', config.videosLimit)
-      .replace('accessToken', config.accessToken)
-  }
-
   componentDidMount() {
     SplashScreen.hide();
-
   }
 
-
-
-  photosTransformResponseHandler = (res) => {
-    if (res.error)
-      return { error: true }
-
-    return {
-      imgsSourcesAndIds: res.data.map((imgData) => ({ id: imgData.id, source: { uri: imgData.source } })),
-      nextPage: res.paging && res.paging.next || null
-    }
-  }
-  videosTransformResponseHandler = (res) => {
-    if (res.error)
-      return { error: true };
-
-    return {
-      videosData: res.data
-        .map((videoData) =>
-          ({
-            id: videoData.id, uri: videoData.source,
-            thumbnail: videoData.thumbnails.data.find(v => v.is_preferred === true).uri
-          })
-        ),
-
-      nextPage: res.paging && res.paging.next || null
-
-    }
-  }
 
   render() {
     const { currentLanguage, languageChangeHandler } = this.props;
@@ -111,8 +68,8 @@ class MainScreen extends Component {
             <PhotosGrid />
           </View>
 
-          <View tabLabel={I18n.t('mainTabs.videosTabLabel', { locale: currentLanguage })}>
-            <VideosGrid videosUrl={this.videosPath} transformResponse={this.videosTransformResponseHandler} />
+          <View tabLabel={I18n.t('mainTabs.videosTabLabel', { locale: currentLanguage })} style={{ flex: 1 }}>
+            <VideosGrid />
           </View>
 
         </ScrollableTabView>
