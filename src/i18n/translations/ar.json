@@ -5,6 +5,11 @@
     "videosTabLabel": "الفيديوهات"
   },
   "warningText": "سيقوم البرنامج تلقائيا بالتحديث عند توفر الانترنت",
-  "emptyContentText": "لم يتم اضافة محتوي ^_^ بعد"
+  "emptyContentText": "لم يتم اضافة محتوي ^_^ بعد",
+  "navigateToLocation": {
+    "dialogTitle": "تحديد المسار فى الخريطة",
+    "dialogMessage": "قم باختيار برنامج للاستخدام",
+    "cancelText": "Close"
+  }
 
 }

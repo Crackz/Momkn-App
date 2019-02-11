@@ -39,14 +39,18 @@ class MainScreen extends Component {
           </Animatable.View >
 
           <ContactIcons
-            styles={{
-
-            }}
             phoneNumber={config.phoneNumber}
             whatsAppPhoneNumber={config.whatsAppPhoneNumber}
-            navigateToLocation={{
+
+            navigateToLocationOptions={{
               latitude: config.navigationToLocationDetailsLatitude,
-              longitude: config.navigationToLocationDetailsLongitude
+              longitude: config.navigationToLocationDetailsLongitude,
+              // title: 'Mahmoud Momkn',  // optional
+              // googleForceLatLon: false,  // optionally force GoogleMaps to use the latlon for the query instead of the title
+              // googlePlaceId: 'ChIJGVtI4by3t4kRr51d_Qm_x58',  // optionally specify the google-place-id
+              dialogTitle: I18n.t("navigateToLocation.dialogTitle", { locale: currentLanguage }),
+              dialogMessage: I18n.t("navigateToLocation.dialogMessage", { locale: currentLanguage }),
+              cancelText: I18n.t("navigateToLocation.cancelText", { locale: currentLanguage })
             }}
           />
 

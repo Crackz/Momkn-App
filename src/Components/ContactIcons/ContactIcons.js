@@ -24,18 +24,8 @@ class ContactIcons extends Component {
     };
 
 
-    navigateToLocation = async ({ latitude, longitude }) => {
-
-        await showLocation({
-            latitude,
-            longitude
-            // title: 'Mahmoud Momkn',  // optional
-            // googleForceLatLon: false,  // optionally force GoogleMaps to use the latlon for the query instead of the title
-            // googlePlaceId: 'ChIJGVtI4by3t4kRr51d_Qm_x58',  // optionally specify the google-place-id
-            // dialogTitle: 'This is the dialog Title', // optional (default: 'Open in Maps')
-            // dialogMessage: 'This is the amazing dialog Message', // optional (default: 'What app would you like to use?')
-            // cancelText: 'This is the cancel button text', // optional (default: 'Cancel')
-        })
+    navigateToLocation = async (options) => {
+        await showLocation(options)
     }
 
     messageToWhatsApp = (phoneNumber) => {
@@ -63,10 +53,7 @@ class ContactIcons extends Component {
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.roundedButton}
-                    onPress={() => this.navigateToLocation({
-                        latitude: this.props.navigateToLocation.latitude,
-                        longitude: this.props.navigateToLocation.longitude
-                    })} >
+                    onPress={() => this.navigateToLocation(this.props.navigateToLocationOptions)} >
                     <AnimatedIcon animation="jello" iterationCount="infinite" name="md-locate" size={32} color="#DD4B3E" />
                 </TouchableOpacity>
 

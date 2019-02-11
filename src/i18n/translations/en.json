@@ -5,5 +5,10 @@
     "videosTabLabel": "Videos"
   },
   "warningText": "No Connection",
-  "emptyContentText": "There is no content yet."
+  "emptyContentText": "There is no content yet.",
+  "navigateToLocation": {
+    "dialogTitle": "Open in Maps",
+    "dialogMessage": "What app would you like to use?",
+    "cancelText": "Close"
+  }
 }
