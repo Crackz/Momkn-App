@@ -1,4 +1,6 @@
 ## Motivation
+friend of mine asked me if i can help him make a simple application that customers would use it to navigate to his barber shop or call,message him , well this app is my answer.
+
 it's just for the seek of making something useful or maybe good for others to learn or use.
 
 ## Features
