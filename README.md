@@ -1,5 +1,5 @@
 ## Motivation
-Just for the seek of making something useful or maybe good for others to learn or use.
+it's just for the seek of making something useful or maybe good for others to learn or use.
 
 ## Features
 - Offline first class citizen app.
@@ -9,5 +9,7 @@ Just for the seek of making something useful or maybe good for others to learn o
 - Support Multiple Languages.
 - Leverage Redux & Redux-Thunk.
 
-![](https://raw.githubusercontent.com/crackz/momkn-app/master/demo/AutoUpdateContenet.gif) 
-![](https://raw.githubusercontent.com/crackz/momkn-app/master/demo/OfflineFirst.gif)
+
+| [![](https://raw.githubusercontent.com/crackz/momkn-app/master/demo/AutoUpdateContenet.gif)]()  | [![](https://raw.githubusercontent.com/crackz/momkn-app/master/demo/OfflineFirst.gif)]()
+|:---:|:---:|:---:|
+| Online Mode | Offline Mode |
