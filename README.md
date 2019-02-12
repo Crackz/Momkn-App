@@ -11,5 +11,5 @@ it's just for the seek of making something useful or maybe good for others to le
 
 
 | [![](https://raw.githubusercontent.com/crackz/momkn-app/master/demo/AutoUpdateContenet.gif)]()  | [![](https://raw.githubusercontent.com/crackz/momkn-app/master/demo/OfflineFirst.gif)]()
-|:---:|:---:|:---:|
+|:---:|:---:|
 | Online Mode | Offline Mode |
